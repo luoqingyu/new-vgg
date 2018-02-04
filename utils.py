@@ -40,7 +40,7 @@ tf.app.flags.DEFINE_string('train_dir','../data/train/', 'the train data dir')
 tf.app.flags.DEFINE_string('val_dir','../data/test/', 'the val data dir')
 
 tf.app.flags.DEFINE_string('mode', 'train', 'train, val or infer')
-tf.app.flags.DEFINE_integer('num_gpus', 1, 'num of gpus')
+tf.app.flags.DEFINE_integer('num_gpus', 0, 'num of gpus')
 
 FLAGS = tf.app.flags.FLAGS
 

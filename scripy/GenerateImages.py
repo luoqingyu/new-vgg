@@ -45,11 +45,7 @@ class GenerateImages:
 
 
     def creat_pic_each_file(self,f,file):
-
-
-
         for num in range(5):
-
             toImage = Image.new('RGBA', (256, 32), (255, 255, 255))
             name = ''
             for i in range(self.max_word_num):
@@ -65,25 +61,21 @@ class GenerateImages:
                     if (self.if_random_space==True):
                         self.space = random.randrange(self.random_space[0],self.random_space[1])
                         #print (self.space)
-
                     toImage.paste(fromImage, ((i) * 32+(self.space), 0))
             name=name.replace('/','')                    #去除不可用的符号
             name = name.replace('.', '')
             file_ = file.replace('/', '_')
             pic_name = file_+str(num)+'_' + name + '.png'
             toImage.save(self.out_path+file+file_+str(num)+'_' + name + '.png')
-
             f.write(file+pic_name+' '+name+'\n')
 
     def mkdir(self,path):  # 判断是否存在指定文件夹，不存在则创建
         # 引入模块
         import os
-
         # 去除首位空格
         path = path.strip()
         # 去除尾部 \ 符号
         path = path.rstrip("\\")
-
         # 判断路径是否存在
         # 存在     True
         # 不存在   False
@@ -105,10 +97,6 @@ class GenerateImages:
             return False
 
     def creatPic(self,num='1000'):
-
-
-
-
         txtName = self.out_path+"word_list.txt"
         f = open(txtName, "w")
         for file1 in range(int(100000 / 25000)):
@@ -127,10 +115,6 @@ if __name__ == '__main__':
                       space=0)              #固定间隔
 
     x.creatPic(num=25000)                     #生成数目
-    x.creatPic(num=100)                     #生成数目
-
-    x.creatPic(num=200)                     #生成数目
-
     end = datetime.datetime.now()
     print(end - start)
 
