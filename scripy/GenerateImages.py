@@ -120,8 +120,8 @@ class GenerateImages:
 
 if __name__ == '__main__':
     start = datetime.datetime.now()
-    x= GenerateImages(src_path='../../data/danzi-train/',
-                      out_path='../../data/train/',
+    x= GenerateImages(src_path='../../data/danzi-test/',
+                      out_path='../../data/test/',
                       if_random_space = True,#是否随机间隔
                       random_space=[-5,5],#随机间隔
                       space=0)              #固定间隔
