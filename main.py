@@ -42,10 +42,11 @@ def train(train_dir=None, val_dir=None, mode='train'):
         # print  (type(image_string))
         # print (image_string.shape)
         image_decoded = tf.image.decode_image(image_string, channels=1)
+        image_resize = tf.image.resize_images(image_decoded,[32.256])
         # print  (type(image_decoded))
         # print (image_decoded.shape)
         # image_resized = tf.image.resize_images(image_decoded, 3)
-        image_decoded =image_decoded/255
+        image_decoded =image_resize/255
         return image_decoded, label
 
     dataset = tf.data.Dataset.from_tensor_slices((filename, label))
