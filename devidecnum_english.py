@@ -89,7 +89,7 @@ if __name__ == '__main__':
         mkdir('../../data/danzi-test/'+str(i))
         for j in pic_dir:
             fromImage = Image.open(j)
-            j = j.replace('data', 'data2')
+            j = j.replace('data2', 'data')
             fromImage.save(j)
 
 
