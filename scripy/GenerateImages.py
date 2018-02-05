@@ -13,6 +13,7 @@ class GenerateImages:
         self.random_space = random_space
         self.space=space
         self.img_list=self.get_imgList()
+        print(self.img_list)
         self.mkdir(out_path)
 
 
@@ -119,7 +120,7 @@ if __name__ == '__main__':
                       random_space=[-5,5],#随机间隔
                       space=0)              #固定间隔
 
-    x.creatPic(num=25000)                     #生成数目
+    #x.creatPic(num=25000)                     #生成数目
     end = datetime.datetime.now()
     print(end - start)
 
