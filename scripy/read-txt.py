@@ -4,8 +4,9 @@ for line in fa.readlines():
     img_path = '../data/train1/'+line.split(" ")[-2]
     img_label = line.split(" ")[-1]
     img_label=img_label.replace('\n','')
-    if len(img_path!=8):
+    if len(img_path)!=8:
         print(img_path)
         print(img_label)
+        print(len(img_label))
     print('999')
 
