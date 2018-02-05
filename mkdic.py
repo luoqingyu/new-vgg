@@ -11,5 +11,9 @@ with open("./dic.txt",'w') as f:
     for i in dic:
         #print  (chardet.detect(i))
         #print (i)
-
+        if (i =='0x2e'):
+            i =-'.'
+        if (i =='0x2f'):
+            i =-'/'
+            
         f.write(i + "\n")
