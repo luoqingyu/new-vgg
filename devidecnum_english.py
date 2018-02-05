@@ -78,11 +78,13 @@ if __name__ == '__main__':
             'W','E','R','T','Y','U','I','O','P','Z','X','C','V','B','N','M','a','b','c','d','e','f','g','h','j','k','l','Q',
             'w','e','r','t','y','u','i','o','p','z','x','c','v','b','n','m',]
     filePath,danzi_list = eachFile("../data/danzi-test/")
+    new_list = []
     for i in danzi_list:
-        new_list=[]
+
         if i in E_list:
             new_list.append(i)
     print(new_list)
+
 
     for i in new_list:
         pic_dir, pic_name = eachFile1("../data1/danzi-test/"+str(i))
