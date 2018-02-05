@@ -53,12 +53,12 @@ class GenerateImages:
     def creat_pic_each_file(self,f,file):
         for num in range(5):
             toImage = Image.new('RGBA', (256, 32), (255, 255, 255))
-            name = ''
+            ture_name = ''
             for i in range(self.max_word_num):
                 zi = random.randrange(0, len(self.img_list))             #选择字
                 if (zi < len(self.img_list)):
                     ziti = random.randrange(0, len(self.img_list[zi]))    #选择字体
-                    name = name + self.img_list[zi][ziti].split("/")[-2]  #获取字的编码
+                    ture_name = ture_name + self.img_list[zi][ziti].split("/")[-2]  #获取字的编码
 
                     # x =  random.randrange(0, len(list))
                     fromImage = Image.open(self.img_list[zi][ziti])
@@ -68,12 +68,14 @@ class GenerateImages:
                         self.space = random.randrange(self.random_space[0],self.random_space[1])
                         #print (self.space)
                     toImage.paste(fromImage, ((i) * 32+(self.space), 0))
-            name=name.replace('/','')                    #去除不可用的符号
+
+
+            name=ture_name.replace('/','')                    #去除不可用的符号
             name = name.replace('.', '')
             file_ = file.replace('/', '_')
             pic_name = file_+str(num)+'_' + name + '.png'
             toImage.save(self.out_path+file+file_+str(num)+'_' + name + '.png')
-            f.write(file+pic_name+' '+name+'\n')
+            f.write(file+pic_name+' '+ture_name+'\n')
 
     def mkdir(self,path):  # 判断是否存在指定文件夹，不存在则创建
         # 引入模块
@@ -114,8 +116,8 @@ class GenerateImages:
 
 if __name__ == '__main__':
     start = datetime.datetime.now()
-    x= GenerateImages(src_path='../../data/danzi-test/',
-                      out_path='../../data/test/',
+    x= GenerateImages(src_path='../../data/danzi-train/',
+                      out_path='../../data/train1/',
                       if_random_space = True,#是否随机间隔
                       random_space=[-5,5],#随机间隔
                       space=0)              #固定间隔
