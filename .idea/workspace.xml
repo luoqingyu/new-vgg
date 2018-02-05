@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb828a7e-2af6-4f87-9f27-a5b0c9f6bce0" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/scripy/GenerateImages.py" afterPath="$PROJECT_DIR$/scripy/GenerateImages.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils.py" afterPath="$PROJECT_DIR$/utils.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -23,11 +23,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="utils.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="utils.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/utils.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="649">
-              <caret line="96" column="42" lean-forward="false" selection-start-line="96" selection-start-column="42" selection-end-line="96" selection-end-column="42" />
+            <state relative-caret-position="217">
+              <caret line="89" column="43" lean-forward="false" selection-start-line="89" selection-start-column="43" selection-end-line="89" selection-end-column="43" />
               <folding>
                 <element signature="e#24#33#0" expanded="true" />
               </folding>
@@ -103,7 +103,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GenerateImages.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="GenerateImages.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scripy/GenerateImages.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="113">
@@ -173,8 +173,8 @@
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/dic.txt" />
         <option value="$PROJECT_DIR$/devidecnum_english.py" />
-        <option value="$PROJECT_DIR$/utils.py" />
         <option value="$PROJECT_DIR$/scripy/GenerateImages.py" />
+        <option value="$PROJECT_DIR$/utils.py" />
       </list>
     </option>
   </component>
@@ -760,22 +760,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/utils.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="649">
-          <caret line="96" column="42" lean-forward="false" selection-start-line="96" selection-start-column="42" selection-end-line="96" selection-end-column="42" />
-          <folding>
-            <element signature="e#24#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/scripy/GenerateImages.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="113">
           <caret line="124" column="4" lean-forward="true" selection-start-line="124" selection-start-column="4" selection-end-line="124" selection-end-column="4" />
           <folding>
             <element signature="e#24#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/utils.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="217">
+          <caret line="89" column="43" lean-forward="false" selection-start-line="89" selection-start-column="43" selection-end-line="89" selection-end-column="43" />
+          <folding>
+            <element signature="e#24#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
