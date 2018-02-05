@@ -77,7 +77,7 @@ if __name__ == '__main__':
     E_list=['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F','G','H','J','K','L','Q',
             'W','E','R','T','Y','U','I','O','P','Z','X','C','V','B','N','M','a','b','c','d','e','f','g','h','j','k','l','Q',
             'w','e','r','t','y','u','i','o','p','z','x','c','v','b','n','m',]
-    filePath,danzi_list = eachFile("../data/danzi/")
+    filePath,danzi_list = eachFile("../data/danzi-test/")
     for i in danzi_list:
         new_list=[]
         if i in E_list:
@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
     for i in new_list:
         pic_dir, pic_name = eachFile1("../data2/danzi-test/"+str(i))
-        mkdir('../../data/danzi/'+str(i))
+        mkdir('../../data/danzi-test/'+str(i))
         for j in pic_dir:
             fromImage = Image.open(j)
             j = j.replace('data', 'data2')
