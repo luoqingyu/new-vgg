@@ -60,7 +60,7 @@ class GenerateImages:
                     ziti = random.randrange(0, len(self.img_list[zi]))    #选择字体
                     if (self.img_list[zi][ziti].split("/")[-2]=='0x2e'):
                         ture_name = ture_name + '.'
-                    if (self.img_list[zi][ziti].split("/")[-2] == '0x2f'):
+                    elif (self.img_list[zi][ziti].split("/")[-2] == '0x2f'):
                         ture_name = ture_name + '/'
                     else:
                         ture_name = ture_name + self.img_list[zi][ziti].split("/")[-2]  #获取字的编码

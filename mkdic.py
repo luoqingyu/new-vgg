@@ -15,5 +15,5 @@ with open("./dic.txt",'w') as f:
             i =-'.'
         if (i =='0x2f'):
             i =-'/'
-            
+
         f.write(i + "\n")
