@@ -39,15 +39,13 @@ def train(train_dir=None, val_dir=None, mode='train'):
 
     def _parse_function(filename, label):
         image_string = tf.read_file(filename)
-        # print  (type(image_string))
-        # print (image_string.shape）
         image_decoded = tf.image.decode_png(image_string, channels=1)
-        image_resize = tf.image.resize_images(image_decoded,32,256)
-        # print  (type(image_decoded))
-        # print (image_decoded.shape)
-        # image_resized = tf.image.resize_images(image_decoded, 3)
-        image_decoded =image_resize/255
-        return image_decoded, label
+        image_decoded = image_decoded / 255
+        image_resize = tf.image.resize_images(image_decoded,[32,tf.shape(image_decoded)[1]])
+        add = tf.zeros((32, 256-tf.shape(image_resize)[1],1))+image_decoded[-1][-1]
+        im =tf.concat( [image_resize,add],1)
+        print(im.shape)
+        return im, label
 
     dataset = tf.data.Dataset.from_tensor_slices((filename, label))
     dataset = dataset.map(_parse_function)
