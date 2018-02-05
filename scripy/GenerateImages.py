@@ -58,7 +58,12 @@ class GenerateImages:
                 zi = random.randrange(0, len(self.img_list))             #选择字
                 if (zi < len(self.img_list)):
                     ziti = random.randrange(0, len(self.img_list[zi]))    #选择字体
-                    ture_name = ture_name + self.img_list[zi][ziti].split("/")[-2]  #获取字的编码
+                    if (self.img_list[zi][ziti].split("/")[-2]=='0x2e'):
+                        ture_name = ture_name + '.'
+                    if (self.img_list[zi][ziti].split("/")[-2] == '0x2f'):
+                        ture_name = ture_name + '/'
+                    else:
+                        ture_name = ture_name + self.img_list[zi][ziti].split("/")[-2]  #获取字的编码
 
                     # x =  random.randrange(0, len(list))
                     fromImage = Image.open(self.img_list[zi][ziti])
