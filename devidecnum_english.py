@@ -89,7 +89,7 @@ if __name__ == '__main__':
 
     for i in new_list:
         pic_dir, pic_name = eachFile1("../data1/danzi-test/"+str(i))
-        mkdir('../../data/danzi-test/'+str(i))
+        mkdir('../data/danzi-test/'+str(i))
         for j in pic_dir:
             fromImage = Image.open(j)
             j = j.replace('data1', 'data')
