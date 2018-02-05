@@ -139,6 +139,10 @@ def train(train_dir=None, val_dir=None, mode='train'):
                     #获得这一轮batch数据的标号##############################
 
                     batch_inputs,batch_labels  = sess.run(iterator.get_next())
+
+
+                    print('sixxixixixixixixix')
+                    print(type(batch_labels))
                     new_batch_labels = utils.sparse_tuple_from_label(batch_labels)  # 对了
                     batch_seq_len = np.asarray([16 for _ in batch_inputs], dtype=np.int64)
 
@@ -160,7 +164,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
                                   model.train_op], feed)
 
 
-                    print(batch_cost)
+                    #print(batch_cost)
                     # calculate the cost
                     train_cost += batch_cost * FLAGS.batch_size
 

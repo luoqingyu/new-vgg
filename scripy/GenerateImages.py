@@ -14,12 +14,15 @@ class GenerateImages:
         self.space=space
         self.img_list=self.get_imgList()
         self.mkdir(out_path)
+    
 
     def get_imgList(self):
         list = []
         A_path, na_list = self.readEachFile(read_path=self.src_path)
         for child_list in A_path:
             img, name = self.readEachFile(child_list + '/')
+
+
             list.append(img)
         return  list
 
@@ -35,6 +38,8 @@ class GenerateImages:
             child = os.path.join('%s%s' % (read_path, allDir))
             # print child.decode('gbk') # .decode('gbk')是解决中文显示乱码问题
             Absolute_dir.append(child)
+
+
             name_list.append(allDir)
         return Absolute_dir, name_list
 
