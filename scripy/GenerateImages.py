@@ -13,13 +13,13 @@ class GenerateImages:
         self.random_space = random_space
         self.space=space
         self.img_list=self.get_imgList()
-        print(self.img_list)
         self.mkdir(out_path)
 
 
     def get_imgList(self):
         list = []
         A_path, na_list = self.readEachFile(read_path=self.src_path)
+        print(na_list)
         for child_list in A_path:
             img, name = self.readEachFile(child_list + '/')
 
