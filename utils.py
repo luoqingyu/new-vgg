@@ -85,7 +85,7 @@ class DataIterator:
                     try:
                         code = [encode_maps[c] for c in list(img_label)]
                         self.image.append(img_path)
-                        if len(code!=8):
+                        if (len(code)!=8):
                             print(len(img_label))
                             print(img_label)
                         self.labels.append(code)
