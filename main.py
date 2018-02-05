@@ -42,7 +42,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
         # print  (type(image_string))
         # print (image_string.shape）
         image_decoded = tf.image.decode_png(image_string, channels=1)
-        image_resize = tf.image.resize_images(image_decoded,[32.256])
+        image_resize = tf.image.resize_images(image_decoded,32,256)
         # print  (type(image_decoded))
         # print (image_decoded.shape)
         # image_resized = tf.image.resize_images(image_decoded, 3)
