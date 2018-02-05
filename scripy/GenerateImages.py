@@ -122,7 +122,7 @@ if __name__ == '__main__':
                       random_space=[-5,5],#随机间隔
                       space=0)              #固定间隔
 
-    #x.creatPic(num=25000)                     #生成数目
+    x.creatPic(num=25000)                     #生成数目
     end = datetime.datetime.now()
     print(end - start)
 
