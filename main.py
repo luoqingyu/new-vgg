@@ -40,8 +40,8 @@ def train(train_dir=None, val_dir=None, mode='train'):
     def _parse_function(filename, label):
         image_string = tf.read_file(filename)
         # print  (type(image_string))
-        # print (image_string.shape)
-        image_decoded = tf.image.decode_image(image_string, channels=1)
+        # print (image_string.shape）
+        image_decoded = tf.image.decode_png(image_string, channels=1)
         image_resize = tf.image.resize_images(image_decoded,[32.256])
         # print  (type(image_decoded))
         # print (image_decoded.shape)
