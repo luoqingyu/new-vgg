@@ -7,7 +7,6 @@ import numpy as np
 import utils
 import tensorflow as tf
 import time
-
 class ReadData:
     def __init__(self,img_list,label_list,batch_size=128):
         self.image = []
@@ -15,7 +14,7 @@ class ReadData:
         self.dataset = tf.data.Dataset.from_tensor_slices((img_list, label_list))
         self.dataset = self.dataset.map(self.parse_function)
         self.dataset = self.dataset.repeat()  # 不带参数为无限个epoch
-        self.dataset = self.dataset.shuffle(buffer_size=10000)  # 缓冲区，随机缓存区
+        self.dataset = self.dataset.shuffle(buffer_size=20000)  # 缓冲区，随机缓存区
         self.batched_dataset = self.dataset.batch(batch_size)
         self.iterator = self.batched_dataset.make_initializable_iterator()
     def parse_function(self,filename, label):
@@ -32,13 +31,13 @@ class ReadData:
     def get_nex_batch(self,sess):
         return  sess.run(self.iterator.get_next())
 if __name__ == '__main__':
-    os.environ['CUDA_VISIBLE_DEVICES'] = '2'
-    val_feeder = utils.DataIterator(data_dir='../data/test', istrain=True)
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+    val_feeder = utils.DataIterator(data_dir='../data/test/', istrain=False)
     filename1 = val_feeder.image
     print(len(filename1))
     label1 = val_feeder.labels
     train_data = ReadData(filename1,label1)
-    config = tf.ConfigProto(allow_soft_placement=True)
+    config = tf.ConfigProto(allow_soft_placement=False)
     with tf.Session(config=config) as sess:
         train_data.init_itetator(sess)
         start_time = time.time()

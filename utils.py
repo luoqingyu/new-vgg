@@ -75,9 +75,9 @@ class DataIterator:
         if istrain:
             i=0
 
-            fa = open("../data/train/word_list.txt", 'r')
+            fa = open(data_dir+"word_list.txt", 'r')
             for line in fa.readlines():
-                img_path = '../data/train/'+line.split(" ")[-2]
+                img_path = data_dir+line.split(" ")[-2]
                 img_label = line.split(" ")[-1]
                 img_label=img_label.replace('\n','')
 
@@ -96,9 +96,9 @@ class DataIterator:
 
         else:
             i = 0
-            fa = open("../data/test/word_list.txt", 'r')
+            fa = open(data_dir+"word_list.txt", 'r')
             for line in fa.readlines():
-                img_path = '../data/test/' + line.split(" ")[-2]
+                img_path = data_dir + line.split(" ")[-2]
                 img_label = line.split(" ")[-1]
                 #print(img_label)
                 img_label = img_label.replace('\n', '')
