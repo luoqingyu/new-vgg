@@ -36,8 +36,8 @@ tf.app.flags.DEFINE_float('beta2', 0.999, 'adam parameter beta2')
 tf.app.flags.DEFINE_integer('decay_steps', 10000, 'the lr decay_step for optimizer')
 tf.app.flags.DEFINE_float('momentum', 0.9, 'the momentum')
 
-tf.app.flags.DEFINE_string('train_dir','../data/train1/', 'the train data dir')
-tf.app.flags.DEFINE_string('val_dir','../data/train1/', 'the val data dir')
+tf.app.flags.DEFINE_string('train_dir','../data/train/', 'the train data dir')
+tf.app.flags.DEFINE_string('val_dir','../data/test/', 'the val data dir')
 
 tf.app.flags.DEFINE_string('mode', 'train', 'train, val or infer')
 tf.app.flags.DEFINE_integer('num_gpus', 0, 'num of gpus')
@@ -55,7 +55,7 @@ with open("./dic.txt") as f:
         line = line.replace('\n','')
 
         #line[1] = int(line[1])
-        
+
         encode_maps[line] = i
         decode_maps[i] = line
 
@@ -75,9 +75,9 @@ class DataIterator:
         if istrain:
             i=0
 
-            fa = open("../data/train1/word_list.txt", 'r')
+            fa = open("../data/train/word_list.txt", 'r')
             for line in fa.readlines():
-                img_path = '../data/train1/'+line.split(" ")[-2]
+                img_path = '../data/train/'+line.split(" ")[-2]
                 img_label = line.split(" ")[-1]
                 img_label=img_label.replace('\n','')
 
@@ -96,9 +96,9 @@ class DataIterator:
 
         else:
             i = 0
-            fa = open("../data/train1/word_list.txt", 'r')
+            fa = open("../data/test/word_list.txt", 'r')
             for line in fa.readlines():
-                img_path = '../data/train1/' + line.split(" ")[-2]
+                img_path = '../data/test/' + line.split(" ")[-2]
                 img_label = line.split(" ")[-1]
                 print(img_label)
                 img_label = img_label.replace('\n', '')
