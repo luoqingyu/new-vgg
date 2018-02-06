@@ -68,7 +68,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
     dataset1 = dataset1.map(_parse_function)
     dataset1 = dataset1.repeat()  # 不带参数为无限个epoch
     dataset1 = dataset1.shuffle(buffer_size=10000)  # 缓冲区，随机缓存区
-    batched_dataset1 = dataset1.batch(32)
+    batched_dataset1 = dataset1.batch(128)
     iterator1 = batched_dataset1.make_initializable_iterator()
 
 
