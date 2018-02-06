@@ -100,7 +100,7 @@ class DataIterator:
             for line in fa.readlines():
                 img_path = '../data/test/' + line.split(" ")[-2]
                 img_label = line.split(" ")[-1]
-                print(img_label)
+                #print(img_label)
                 img_label = img_label.replace('\n', '')
                 if os.path.exists(img_path):
                     try:
@@ -108,7 +108,7 @@ class DataIterator:
                         self.image.append(img_path)
                         self.labels.append(code)
                     except:
-                            print('333')    
+                            #print('333')
                             continue
 
 
