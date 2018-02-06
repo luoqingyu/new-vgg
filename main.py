@@ -41,11 +41,11 @@ def train(train_dir=None, val_dir=None, mode='train'):
         image_string = tf.read_file(filename)
         image_decoded = tf.image.decode_png(image_string, channels=1)
         image_decoded = image_decoded / 255
-        image_resize = tf.image.resize_images(image_decoded,[32,tf.shape(image_decoded)[1]])
-        add = tf.zeros((32, 256-tf.shape(image_resize)[1],1))+image_decoded[-1][-1]
-        im =tf.concat( [image_resize,add],1)
-        print(im.shape)
-        return im, label
+        #image_resize = tf.image.resize_images(image_decoded,[32,tf.shape(image_decoded)[1]])
+        #add = tf.zeros((32, 256-tf.shape(image_resize)[1],1))+image_decoded[-1][-1]
+        #im =tf.concat( [image_resize,add],1)
+        #print(im.shape)
+        return image_decoded, label
 
     dataset = tf.data.Dataset.from_tensor_slices((filename, label))
     dataset = dataset.map(_parse_function)
@@ -126,11 +126,6 @@ def train(train_dir=None, val_dir=None, mode='train'):
                 train_cost = 0
                 start_time = time.time()
                 batch_time = time.time()
-
-                # the tracing part
-                #print  num_batches_per_epoch
-                #print  '999'
-                #print  num_batches_per_epoch
                 for cur_batch in range(num_batches_per_epoch):
                     if (cur_batch  ) % 10 == 1:
                         print('batch', cur_batch, ': time', time.time() - batch_time)
@@ -141,8 +136,8 @@ def train(train_dir=None, val_dir=None, mode='train'):
                     batch_inputs,batch_labels  = sess.run(iterator.get_next())
 
 
-                    print('sixxixixixixixixix')
-                    print(type(batch_labels))
+                    #print('sixxixixixixixixix')
+                    #print(type(batch_labels))
                     new_batch_labels = utils.sparse_tuple_from_label(batch_labels)  # 对了
                     batch_seq_len = np.asarray([16 for _ in batch_inputs], dtype=np.int64)
 
@@ -182,6 +177,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
                     # train_err += the_err * FLAGS.batch_size
                     # do validation
                     if step % FLAGS.validation_steps == 0:
+                        validation_start_time = time.time()
                         acc_batch_total = 0
                         lastbatch_err = 0
                         lr = 0
@@ -224,9 +220,10 @@ def train(train_dir=None, val_dir=None, mode='train'):
                         log = "{}/{} {}:{}:{} Epoch {}/{}, " \
                               "max_accuracy = {:.3f},max_Epoch {},accuracy = {:.3f},acc_batch_total = {:.3f},avg_train_cost = {:.3f}, " \
                               " time = {:.3f},lr={:.8f}"
+
                         print(log.format(now.month, now.day, now.hour, now.minute, now.second,
                                          cur_epoch + 1, FLAGS.num_epochs, tmp_max,tmp_epoch, accuracy,acc_batch_total,avg_train_cost,
-                                         time.time() - start_time, lr))
+                                         time.time() - validation_start_time, lr))
 
 
 def infer(img_path, mode='infer'):
