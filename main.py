@@ -15,7 +15,7 @@ import helper
 #import matplotlib.pyplot as plt
 FLAGS = utils.FLAGS
 
-#os.environ['CUDA_VISIBLE_DEVICES']=FLAGS.gpu_idex 
+os.environ['CUDA_VISIBLE_DEVICES']=FLAGS.gpu_idex
 logger = logging.getLogger('Traing for OCR using CNN+' + FLAGS.model +'+CTC')
 logger.setLevel(logging.INFO)
 
@@ -87,6 +87,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
     ###########################data################################################
 
     with tf.device('/cpu:0'):
+
         config = tf.ConfigProto(allow_soft_placement=True)
 
         #######################read  data###################################
