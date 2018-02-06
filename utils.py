@@ -13,7 +13,7 @@ maxPrintLen = 100
 
 tf.app.flags.DEFINE_string('checkpoint_dir', '../checkpoint/lstm_3', 'the checkpoint dir')
 tf.app.flags.DEFINE_integer('rnn_layers', 3 ,'number of rnn layers')
-tf.app.flags.DEFINE_string('gpu_idex', '2' ,'index of gpu' )
+tf.app.flags.DEFINE_string('gpu_idex', '0' ,'index of gpu' )
 tf.app.flags.DEFINE_string('model', 'lstm' , 'name of the rnn part')
 tf.app.flags.DEFINE_string('log_dir', '../log/lstm_3', 'the logging dir')
 
