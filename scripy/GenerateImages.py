@@ -51,7 +51,7 @@ class GenerateImages:
 
 
     def creat_pic_each_file(self,f,file):
-        for num in range(10):
+        for num in range(100):
             toImage = Image.new('RGBA', (256, 32), (255, 255, 255))
             ture_name = ''
             for i in range(self.max_word_num):
