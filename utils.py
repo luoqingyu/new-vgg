@@ -108,7 +108,7 @@ class DataIterator:
                         self.image.append(img_path)
                         self.labels.append(code)
                     except:
-                            #print('333')
+
                             continue
 
 

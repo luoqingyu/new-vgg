@@ -30,7 +30,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
     #开始构建图
     model.build_graph()
     print('loading train data, please wait---------------------')
-    train_feeder = utils.DataIterator(data_dir=val_dir,istrain=False)
+    train_feeder = utils.DataIterator(data_dir=FLAGS.train_dir,istrain=True)
 
     #########################read data###############################
     filename = train_feeder.image
@@ -60,7 +60,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
 
     print('get image: ', train_feeder.size)
     print('loading validation data, please wait---------------------')
-    val_feeder = utils.DataIterator(data_dir=val_dir,istrain=False)
+    val_feeder = utils.DataIterator(data_dir=FLAGS.test_dir,istrain=False)
     #######################################################################
     filename1 = val_feeder.image
     label1 = val_feeder.labels
@@ -71,11 +71,6 @@ def train(train_dir=None, val_dir=None, mode='train'):
     dataset1 = dataset1.shuffle(buffer_size=10000)  # 缓冲区，随机缓存区
     batched_dataset1 = dataset1.batch(128)
     iterator1 = batched_dataset1.make_initializable_iterator()
-
-
-
-
-
     print('get image: ', val_feeder.size)
 
     num_train_samples = train_feeder.size  
@@ -125,23 +120,20 @@ def train(train_dir=None, val_dir=None, mode='train'):
             tmp_max = 0
             tmp_epoch = 0
             #print  FLAGS.num_epochs
+
             for cur_epoch in range(FLAGS.num_epochs):
                 shuffle_idx = np.random.permutation(num_train_samples)
                 train_cost = 0
                 start_time = time.time()
                 batch_time = time.time()
                 for cur_batch in range(num_batches_per_epoch):
-                    if (cur_batch  ) % 10 == 1:
-                        print('batch', cur_batch, ': time', time.time() - batch_time)
-                    batch_time = time.time()
+
 
                     #获得这一轮batch数据的标号##############################
 
                     batch_inputs,batch_labels  = sess.run(train_data)
 
 
-                    #print('sixxixixixixixixix')
-                    #print(type(batch_labels))
                     new_batch_labels = utils.sparse_tuple_from_label(batch_labels)  # 对了
                     batch_seq_len = np.asarray([16 for _ in batch_inputs], dtype=np.int64)
 
@@ -163,7 +155,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
                                   model.train_op], feed)
 
 
-                    #print(batch_cost)
+
                     # calculate the cost
                     train_cost += batch_cost * FLAGS.batch_size
 
@@ -177,7 +169,9 @@ def train(train_dir=None, val_dir=None, mode='train'):
                         logger.info('save the checkpoint of{0}', format(step))
                         saver.save(sess, os.path.join(FLAGS.checkpoint_dir, 'ocr-model'),
                                    global_step=step)
-
+                    if (cur_batch  ) % 10 == 1:
+                        print('batch', cur_batch, ': time', time.time() - batch_time,'loss',batch_cost)
+                    batch_time = time.time()
                     # train_err += the_err * FLAGS.batch_size
                     # do validation
                     if step % FLAGS.validation_steps == 0:
@@ -193,20 +187,10 @@ def train(train_dir=None, val_dir=None, mode='train'):
                                         model.labels: new_batch_labels,
                                         model.seq_len: batch_seq_len}
 
-                            #print  val_labels
 
                             dense_decoded, lr = \
                                 sess.run([model.dense_decoded, model.lrn_rate],
                                          val_feed)
-
-                            # print the decode result
-                            #ori_labels = val_feeder.the_label(batch_labels)
-
-                            #print(dense_decoded)
-                            #print(len(dense_decoded))
-                            #print(batch_labels)
-                            #print(type(batch_labels))
-
 
                             acc = utils.accuracy_calculation(batch_labels.tolist(), dense_decoded,
                                                              ignore_value=-1, isPrint=True)

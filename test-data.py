@@ -1,9 +1,5 @@
 # -*- coding: UTF-8 -*-
 import  os
-import  random
-import PIL.Image as Image
-import datetime
-import numpy as np
 import utils
 import tensorflow as tf
 import time
@@ -40,6 +36,7 @@ if __name__ == '__main__':
     config = tf.ConfigProto(allow_soft_placement=False)
     with tf.Session(config=config) as sess:
         train_data.init_itetator(sess)
+        #这行必须放在loop之外
         tf_train_data  =  train_data.get_nex_batch()
         start_time = time.time()
         for i in range(1000):
