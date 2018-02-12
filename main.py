@@ -125,21 +125,20 @@ def train(train_dir=None, val_dir=None, mode='train'):
                 shuffle_idx = np.random.permutation(num_train_samples)
                 train_cost = 0
                 start_time = time.time()
-                batch_time = time.time()
+
                 for cur_batch in range(num_batches_per_epoch):
 
-
+                    batch_time = time.time()
                     #获得这一轮batch数据的标号##############################
                     read_data_start = time.time()
                     batch_inputs,batch_labels  = sess.run(train_data)
-                    print(time.time()-read_data_start)
-
+                    print('read data timr',time.time()-read_data_start)
+                    process_data_start = time.time()
                     new_batch_labels = utils.sparse_tuple_from_label(batch_labels)  # 对了
                     batch_seq_len = np.asarray([16 for _ in batch_inputs], dtype=np.int64)
+                    print('process data timr', time.time() - process_data_start)
 
-
-
-
+                    train_data_start = time.time()
                     # batch_inputs,batch_seq_len,batch_labels=utils.gen_batch(FLAGS.batch_size)###############
 
                     feed = {model.inputs: batch_inputs,
@@ -154,14 +153,11 @@ def train(train_dir=None, val_dir=None, mode='train'):
                         sess.run([model.merged_summay, model.cost, model.global_step,
                                   model.train_op], feed)
 
-
-
                     # calculate the cost
                     train_cost += batch_cost * FLAGS.batch_size
-
                     #print  train_cost
                     train_writer.add_summary(summary_str, step)
-
+                    print('train data timr', time.time() - process_data_start)
                     # save the checkpoint
                     if step % FLAGS.save_steps == 1:
                         if not os.path.isdir(FLAGS.checkpoint_dir):
