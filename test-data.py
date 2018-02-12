@@ -28,8 +28,8 @@ class ReadData:
         return im, label
     def init_itetator(self,sess):
         sess.run(self.iterator.initializer)
-    def get_nex_batch(self,sess):
-        return  sess.run(self.iterator.get_next())
+    def get_nex_batch(self):
+        return  self.iterator.get_next()
 if __name__ == '__main__':
     os.environ['CUDA_VISIBLE_DEVICES'] = '0'
     val_feeder = utils.DataIterator(data_dir='../data/test/', istrain=False)
@@ -40,9 +40,10 @@ if __name__ == '__main__':
     config = tf.ConfigProto(allow_soft_placement=False)
     with tf.Session(config=config) as sess:
         train_data.init_itetator(sess)
+        tf_train_data  =  train_data.get_nex_batch()
         start_time = time.time()
         for i in range(1000):
-            imgbatch, label_batch = train_data.get_nex_batch(sess)
+            imgbatch, label_batch = sess.run(tf_train_data)
         print(time.time()-start_time)
 
 

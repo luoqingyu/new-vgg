@@ -1,97 +1,68 @@
-#-*- coding: UTF-8 -*-
-import os
+# -*- coding: UTF-8 -*-
+import  os
 import  random
-import shutil
 import PIL.Image as Image
-def mkdir(path):     #判断是否存在指定文件夹，不存在则创建
-    # 引入模块
-    import os
-    # 去除首位空格
-    path = path.strip()
-    # 去除尾部 \ 符号
-    path = path.rstrip("\\")
-    # 判断路径是否存在
-    # 存在     True
-    # 不存在   False
-    isExists = os.path.exists(path)
-
-    # 判断结果
-    if not isExists:
-        # 如果不存在则创建目录
-        # 创建目录操作函数
-        os.makedirs(path)
-
-        print path
-        print  ' 创建成功'
-        return True
-    else:
-        # 如果目录存在则不创建，并提示目录已存在
-        print path
-        print  ' 目录已存在'
-        return False
-
-# 遍历指定目录，显示目录下的所有文件名
-def eachFile(filepath):
-    pathDir =  os.listdir(filepath)
-    child_file_name=[]
-    full_child_file_list = []
-    for allDir in pathDir:
-        allDir =unicode(allDir, 'utf-8')
-        child = os.path.join('%s%s' % (filepath, allDir))
-        #print child.decode('gbk') # .decode('gbk')是解决中文显示乱码问题
-        full_child_file_list.append(child)
-        child_file_name.append(allDir)
-    return  full_child_file_list,child_file_name
-
-def eachFile1(filepath):
-    dir_list = []
-    name_list = []
-    pathDir =  os.listdir(filepath)
-    for allDir in pathDir:
-        name_list.append(allDir)
-        child = os.path.join('%s%s' % (filepath+'/', allDir))
-        dir_list.append(child)
-    return  dir_list,name_list
+import datetime
+import numpy as np
+import utils
+import tensorflow as tf
+import time
+class ReadData:
+    def __init__(self,img_list,label_list,batch_size=128):
+        self.image = []
+        self.labels = []
+        self.dataset = tf.data.Dataset.from_tensor_slices((img_list, label_list))
+        self.dataset = self.dataset.map(self.parse_function)
+        self.dataset = self.dataset.repeat()  # 不带参数为无限个epoch
+        self.dataset = self.dataset.shuffle(buffer_size=20000)  # 缓冲区，随机缓存区
+        self.batched_dataset = self.dataset.batch(batch_size)
+        self.iterator = self.batched_dataset.make_initializable_iterator()
+    def parse_function(self,filename, label):
+        image_string = tf.read_file(filename)
+        image_decoded = tf.image.decode_png(image_string, channels=1)
+        image_decoded = image_decoded / 255
+        image_resize = tf.image.resize_images(image_decoded,[32,tf.shape(image_decoded)[1]])
+        add = tf.zeros((32, 256-tf.shape(image_resize)[1],1))+image_decoded[-1][-1]
+        im =tf.concat( [image_resize,add],1)
+        #print(im.shape)
+        return im, label
+    def init_itetator(self,sess):
+        sess.run(self.iterator.initializer)
+    def get_nex_batch(self):
+        return  self.iterator.get_next()
 
 
 
+def parse_function(filename, label):
+    image_string = tf.read_file(filename)
+    image_decoded = tf.image.decode_png(image_string, channels=1)
+    image_decoded = image_decoded / 255
+    image_resize = tf.image.resize_images(image_decoded,[32,tf.shape(image_decoded)[1]])
+    add = tf.zeros((32, 256-tf.shape(image_resize)[1],1))+image_decoded[-1][-1]
+    im =tf.concat( [image_resize,add],1)
+        #print(im.shape)
+    return im, label
 if __name__ == '__main__':
-    filePath,danzi_list = eachFile("/home/lqy/project/OCR/ocr_cnn_lstm_ctc/ocr_cnn_lstm_ctc/data/danzi/")
-    for i in danzi_list:
-        path  = '/home/lqy/project/OCR/ocr_cnn_lstm_ctc/ocr_cnn_lstm_ctc/data/danzi-train/' +i
-        mkdir(path)
-        path = '/home/lqy/project/OCR/ocr_cnn_lstm_ctc/ocr_cnn_lstm_ctc/data/danzi-test/' + i
-        mkdir(path)
-
-    train_pic_dir=[]
-    test_pic_dir=[]
-    for i in filePath:
-        pic_dir,pic_name=eachFile1(i)
-        random.shuffle(pic_dir)
-        train_list=pic_dir[0:int(0.7*len(pic_dir))]
-        test_list=pic_dir[int(0.7*len(pic_dir)):]
-        for j in train_list:
-            fromImage = Image.open(j)
-            j=j.replace('danzi','danzi-train')
-            fromImage.save(j)
-        for k in test_list:
-            fromImage = Image.open(k)
-            k=k.replace('danzi','danzi-test')
-            fromImage.save(k)
+    os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+    val_feeder = utils.DataIterator(data_dir='../data/test/', istrain=False)
+    filename = val_feeder.image
+    print(len(filename))
+    label = val_feeder.labels
 
 
+    dataset = tf.data.Dataset.from_tensor_slices((filename, label))
+    dataset = dataset.map(parse_function)
+    dataset = dataset.repeat()  # 不带参数为无限个epoch
+    dataset = dataset.shuffle(buffer_size=20000)  # 缓冲区，随机缓存区
+    batched_dataset = dataset.batch(128)
+    iterator = batched_dataset.make_initializable_iterator()
+    with tf.Session() as sess:
+        sess.run(iterator.initializer)
 
-
-
-
-
-
-
-
-
-
-
-
-
+        tf_train_data  = iterator.get_next()
+        start_time = time.time()
+        for i in range(1000):
+            imgbatch, label_batch = sess.run(tf_train_data)
+        print(time.time()-start_time)
 
 

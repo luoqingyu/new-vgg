@@ -30,7 +30,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
     #开始构建图
     model.build_graph()
     print('loading train data, please wait---------------------')
-    train_feeder = utils.DataIterator(data_dir=train_dir)
+    train_feeder = utils.DataIterator(data_dir=val_dir,istrain=False)
 
     #########################read data###############################
     filename = train_feeder.image
@@ -53,6 +53,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
     dataset = dataset.shuffle(buffer_size=10000)  # 缓冲区，随机缓存区
     batched_dataset = dataset.batch(128)
     iterator = batched_dataset.make_initializable_iterator()
+
     ##################################end######################################
 
 
@@ -100,6 +101,8 @@ def train(train_dir=None, val_dir=None, mode='train'):
         with tf.Session(config=config) as sess:
             sess.run(iterator.initializer)
             sess.run(iterator1.initializer)
+            train_data = iterator.get_next()
+            test_data = iterator1.get_next()
             #全局变量初始化
             sess.run(tf.global_variables_initializer())
 
@@ -134,7 +137,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
 
                     #获得这一轮batch数据的标号##############################
 
-                    batch_inputs,batch_labels  = sess.run(iterator.get_next())
+                    batch_inputs,batch_labels  = sess.run(train_data)
 
 
                     #print('sixxixixixixixixix')
@@ -183,7 +186,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
                         lastbatch_err = 0
                         lr = 0
                         for j in range(num_batches_per_epoch_val):
-                            batch_inputs, batch_labels = sess.run(iterator1.get_next())
+                            batch_inputs, batch_labels = sess.run(test_data)
                             new_batch_labels = utils.sparse_tuple_from_label(batch_labels)  # 对了
                             batch_seq_len = np.asarray([16 for _ in batch_inputs], dtype=np.int64)
                             val_feed = {model.inputs: batch_inputs,
