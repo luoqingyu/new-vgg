@@ -12,8 +12,8 @@ with open("./dic.txt",'w') as f:
         #print  (chardet.detect(i))
         #print (i)
         if (i =='0x2e'):
-            i =-'.'
+            i ='.'
         if (i =='0x2f'):
-            i =-'/'
+            i ='/'
 
         f.write(i + "\n")
