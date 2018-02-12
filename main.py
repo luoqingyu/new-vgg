@@ -171,7 +171,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
                                    global_step=step)
                     if (cur_batch  ) % 10 == 1:
                         print('batch', cur_batch, ': time', time.time() - batch_time,'loss',batch_cost)
-                    batch_time = time.time()
+                        batch_time = time.time()
                     # train_err += the_err * FLAGS.batch_size
                     # do validation
                     if step % FLAGS.validation_steps == 0:
