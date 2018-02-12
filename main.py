@@ -11,6 +11,7 @@ from skimage import transform
 import cnn_lstm_otc_ocr
 import utils
 import helper
+import  ReadData
 #os.environ["CUDA_VISIBLE_DEVICES"] = "2"
 #import matplotlib.pyplot as plt
 FLAGS = utils.FLAGS
@@ -18,7 +19,7 @@ FLAGS = utils.FLAGS
 os.environ['CUDA_VISIBLE_DEVICES']=FLAGS.gpu_idex
 logger = logging.getLogger('Traing for OCR using CNN+' + FLAGS.model +'+CTC')
 logger.setLevel(logging.INFO)
-
+batch_time = time.time()
 
 def train(train_dir=None, val_dir=None, mode='train'):
     if FLAGS.model == 'lstm':
@@ -29,57 +30,26 @@ def train(train_dir=None, val_dir=None, mode='train'):
 
     #开始构建图
     model.build_graph()
+    #########################read  train   data###############################
     print('loading train data, please wait---------------------')
-    train_feeder = utils.DataIterator(data_dir=FLAGS.train_dir,istrain=True)
-
-    #########################read data###############################
+    train_feeder = utils.DataIterator(data_dir=FLAGS.train_dir, istrain=True)
+    print('get image  data size: ', train_feeder.size)
     filename = train_feeder.image
     label = train_feeder.labels
     print(len(filename))
-
-    def _parse_function(filename, label):
-        image_string = tf.read_file(filename)
-        image_decoded = tf.image.decode_png(image_string, channels=1)
-        image_decoded = image_decoded / 255
-        #image_resize = tf.image.resize_images(image_decoded,[32,tf.shape(image_decoded)[1]])
-        #add = tf.zeros((32, 256-tf.shape(image_resize)[1],1))+image_decoded[-1][-1]
-        #im =tf.concat( [image_resize,add],1)
-        #print(im.shape)
-        return image_decoded, label
-
-    dataset = tf.data.Dataset.from_tensor_slices((filename, label))
-    dataset = dataset.map(_parse_function)
-    dataset = dataset.repeat()  # 不带参数为无限个epoch
-    dataset = dataset.shuffle(buffer_size=10000)  # 缓冲区，随机缓存区
-    batched_dataset = dataset.batch(128)
-    iterator = batched_dataset.make_initializable_iterator()
-
-    ##################################end######################################
-
-
-
-    print('get image: ', train_feeder.size)
+    train_data = ReadData.ReadData(filename, label)
+    ##################################read  test   data######################################
     print('loading validation data, please wait---------------------')
     val_feeder = utils.DataIterator(data_dir=FLAGS.val_dir,istrain=False)
-    #######################################################################
     filename1 = val_feeder.image
     label1 = val_feeder.labels
-
-    dataset1 = tf.data.Dataset.from_tensor_slices((filename1, label1))
-    dataset1 = dataset1.map(_parse_function)
-    dataset1 = dataset1.repeat()  # 不带参数为无限个epoch
-    dataset1 = dataset1.shuffle(buffer_size=10000)  # 缓冲区，随机缓存区
-    batched_dataset1 = dataset1.batch(128)
-    iterator1 = batched_dataset1.make_initializable_iterator()
-    print('get image: ', val_feeder.size)
-
-    num_train_samples = train_feeder.size  
+    test_data = ReadData.ReadData(filename1, label1)
+    print('val get image: ', val_feeder.size)
+   ##################计算batch 数
+    num_train_samples = train_feeder.size
     num_batches_per_epoch = int(num_train_samples / FLAGS.batch_size)  # 训练集一次epoch需要的batch数
-
     num_val_samples = val_feeder.size
     num_batches_per_epoch_val = int(num_val_samples / FLAGS.batch_size)  # 验证集一次epoch需要的batch数
-
-    shuffle_idx_val = np.random.permutation(num_val_samples)
     ###########################data################################################
 
     with tf.device('/cpu:0'):
@@ -88,19 +58,14 @@ def train(train_dir=None, val_dir=None, mode='train'):
 
         #######################read  data###################################
 
-
-
-
-
-
         with tf.Session(config=config) as sess:
-            sess.run(iterator.initializer)
-            sess.run(iterator1.initializer)
-            train_data = iterator.get_next()
-            test_data = iterator1.get_next()
+            #初始化data迭代器
+            train_data.init_itetator(sess)
+            test_data.init_itetator(sess)
+            train_data = train_data.get_nex_batch()
+            test_data = test_data.get_nex_batch()
             #全局变量初始化
             sess.run(tf.global_variables_initializer())
-
             saver = tf.train.Saver(tf.global_variables(), max_to_keep=100) #存储模型
             train_writer = tf.summary.FileWriter(FLAGS.log_dir + '/train', sess.graph) 
 
@@ -119,16 +84,12 @@ def train(train_dir=None, val_dir=None, mode='train'):
             epoch_res = []
             tmp_max = 0
             tmp_epoch = 0
-            #print  FLAGS.num_epochs
 
             for cur_epoch in range(FLAGS.num_epochs):
-                shuffle_idx = np.random.permutation(num_train_samples)
+
                 train_cost = 0
-                start_time = time.time()
-
+                batch_time = time.time()
                 for cur_batch in range(num_batches_per_epoch):
-
-                    batch_time = time.time()
                     #获得这一轮batch数据的标号##############################
                     read_data_start = time.time()
                     batch_inputs,batch_labels  = sess.run(train_data)
@@ -139,13 +100,9 @@ def train(train_dir=None, val_dir=None, mode='train'):
                     print('process data timr', time.time() - process_data_start)
 
                     train_data_start = time.time()
-                    # batch_inputs,batch_seq_len,batch_labels=utils.gen_batch(FLAGS.batch_size)###############
-
                     feed = {model.inputs: batch_inputs,
                             model.labels: new_batch_labels,
                             model.seq_len: batch_seq_len}
-                    #print  batch_labels
-
                     # if summary is needed
                     # batch_cost,step,train_summary,_ = sess.run([cost,global_step,merged_summay,optimizer],feed)
 
@@ -157,7 +114,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
                     train_cost += batch_cost * FLAGS.batch_size
                     #print  train_cost
                     train_writer.add_summary(summary_str, step)
-                    print('train data timr', time.time() - process_data_start)
+                    print('train data timr', time.time() - train_data_start)
                     # save the checkpoint
                     if step % FLAGS.save_steps == 1:
                         if not os.path.isdir(FLAGS.checkpoint_dir):
