@@ -130,9 +130,9 @@ def train(train_dir=None, val_dir=None, mode='train'):
 
 
                     #获得这一轮batch数据的标号##############################
-
+                    read_data_start = time.time()
                     batch_inputs,batch_labels  = sess.run(train_data)
-
+                    print(time.time()-read_data_start)
 
                     new_batch_labels = utils.sparse_tuple_from_label(batch_labels)  # 对了
                     batch_seq_len = np.asarray([16 for _ in batch_inputs], dtype=np.int64)
