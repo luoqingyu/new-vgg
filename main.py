@@ -60,7 +60,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
 
     print('get image: ', train_feeder.size)
     print('loading validation data, please wait---------------------')
-    val_feeder = utils.DataIterator(data_dir=FLAGS.test_dir,istrain=False)
+    val_feeder = utils.DataIterator(data_dir=FLAGS.val_dir,istrain=False)
     #######################################################################
     filename1 = val_feeder.image
     label1 = val_feeder.labels
