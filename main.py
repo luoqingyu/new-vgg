@@ -95,7 +95,9 @@ def train(train_dir=None, val_dir=None, mode='train'):
                     batch_inputs,batch_labels  = sess.run(train_data)
                     print('read data timr',time.time()-read_data_start)
                     process_data_start = time.time()
-                    new_batch_labels = utils.sparse_tuple_from_label(batch_labels)  # 对了
+                    print('233333333333333',type(batch_labels))
+
+                    new_batch_labels = utils.sparse_tuple_from_label(batch_labels.tolist())  # 对了
                     batch_seq_len = np.asarray([16 for _ in batch_inputs], dtype=np.int64)
                     print('process data timr', time.time() - process_data_start)
 
@@ -135,7 +137,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
                         for j in range(num_batches_per_epoch_val):
                             batch_inputs, batch_labels = sess.run(test_data)
                             new_batch_labels = utils.sparse_tuple_from_label(batch_labels)  # 对了
-                            batch_seq_len = np.asarray([16 for _ in batch_inputs], dtype=np.int64)
+                            batch_seq_len = np.asarray([FLAGS.max_stepsize for _ in batch_inputs], dtype=np.int64)
                             val_feed = {model.inputs: batch_inputs,
                                         model.labels: new_batch_labels,
                                         model.seq_len: batch_seq_len}

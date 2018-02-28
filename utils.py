@@ -24,7 +24,7 @@ tf.app.flags.DEFINE_float('initial_learning_rate', 1e-3, 'inital lr')
 tf.app.flags.DEFINE_integer('image_height', 32, 'image height')
 tf.app.flags.DEFINE_integer('image_width', 256, 'image width')
 tf.app.flags.DEFINE_integer('image_channel', 1, 'image channels as input')
-tf.app.flags.DEFINE_integer('max_stepsize', 16, 'max stepsize in lstm, as well as '                                             'the output channels of last layer in CNN')
+tf.app.flags.DEFINE_integer('max_stepsize', 32, 'max stepsize in lstm, as well as '                                             'the output channels of last layer in CNN')
 tf.app.flags.DEFINE_integer('num_hidden', 256, 'number of hidden units in lstm')
 tf.app.flags.DEFINE_integer('num_epochs', 10000, 'maximum epochs')
 tf.app.flags.DEFINE_integer('batch_size',128, 'the batch_size')
@@ -36,11 +36,11 @@ tf.app.flags.DEFINE_float('beta2', 0.999, 'adam parameter beta2')
 tf.app.flags.DEFINE_integer('decay_steps', 10000, 'the lr decay_step for optimizer')
 tf.app.flags.DEFINE_float('momentum', 0.9, 'the momentum')
 
-tf.app.flags.DEFINE_string('train_dir','../data/train/', 'the train data dir')
+tf.app.flags.DEFINE_string('train_dir','../data/test/', 'the train data dir')
 tf.app.flags.DEFINE_string('val_dir','../data/test/', 'the val data dir')
 
 tf.app.flags.DEFINE_string('mode', 'train', 'train, val or infer')
-tf.app.flags.DEFINE_integer('num_gpus', 0, 'num of gpus')
+tf.app.flags.DEFINE_integer('num_gpus', 1, 'num of gpus')
 
 FLAGS = tf.app.flags.FLAGS
 
@@ -85,9 +85,10 @@ class DataIterator:
                     try:
                         code = [encode_maps[c] for c in list(img_label)]
                         self.image.append(img_path)
-                        if (len(code)!=8):
-                            print(len(img_label))
-                            print(img_label)
+                        if (len(code)<15):
+                            for add in range(15-len(code)):
+                                code.append(0)
+                        #print(code)
                         self.labels.append(code)
 
 
@@ -175,15 +176,16 @@ def sparse_tuple_from_label(sequences, dtype=np.int32):
     """
     indices = []
     values = []
-
+    print('2222222222222',type(sequences))
     for n, seq in enumerate(sequences):
+        while(seq[-1]==0):
+            seq.remove(0)
+        print(seq)
         indices.extend(zip([n] * len(seq), range(len(seq))))
         values.extend(seq)
-
-    indices = np.asarray(indices, dtype=np.int64)
-    values = np.asarray(values, dtype=dtype)
-    shape = np.asarray([len(sequences), np.asarray(indices).max(0)[1] + 1], dtype=np.int64)
-
+    indices =  np.asarray(indices, dtype=np.int64)
+    values =   np.asarray(values, dtype=dtype)
+    shape =    np.asarray([len(sequences), np.asarray(indices).max(0)[1] + 1], dtype=np.int64)
     return indices, values, shape
 
 
