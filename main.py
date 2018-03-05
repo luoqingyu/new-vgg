@@ -91,17 +91,18 @@ def train(train_dir=None, val_dir=None, mode='train'):
                 batch_time = time.time()
                 for cur_batch in range(num_batches_per_epoch):
                     #获得这一轮batch数据的标号##############################
-                    read_data_start = time.time()
+                    #read_data_start = time.time()
                     batch_inputs,batch_labels  = sess.run(train_data)
-                    print('read data timr',time.time()-read_data_start)
+                    #print('read data timr',time.time()-read_data_start)
                     process_data_start = time.time()
-                    print('233333333333333',type(batch_labels))
+                    #print('233333333333333',type(batch_labels))
 
                     new_batch_labels = utils.sparse_tuple_from_label(batch_labels.tolist())  # 对了
-                    batch_seq_len = np.asarray([16 for _ in batch_inputs], dtype=np.int64)
-                    print('process data timr', time.time() - process_data_start)
+                    batch_seq_len = np.asarray([FLAGS.max_stepsize  for _ in batch_inputs], dtype=np.int64)
+                    #print('process data timr', time.time() - process_data_start)
 
-                    train_data_start = time.time()
+                    #train_data_start = time.time()
+                    #print('2444444',batch_inputs.shape())
                     feed = {model.inputs: batch_inputs,
                             model.labels: new_batch_labels,
                             model.seq_len: batch_seq_len}
@@ -115,8 +116,8 @@ def train(train_dir=None, val_dir=None, mode='train'):
                     # calculate the cost
                     train_cost += batch_cost * FLAGS.batch_size
                     #print  train_cost
-                    train_writer.add_summary(summary_str, step)
-                    print('train data timr', time.time() - train_data_start)
+                    #train_writer.add_summary(summary_str, step)
+                    #print('train data timr', time.time() - train_data_start)
                     # save the checkpoint
                     if step % FLAGS.save_steps == 1:
                         if not os.path.isdir(FLAGS.checkpoint_dir):
@@ -124,7 +125,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
                         logger.info('save the checkpoint of{0}', format(step))
                         saver.save(sess, os.path.join(FLAGS.checkpoint_dir, 'ocr-model'),
                                    global_step=step)
-                    if (cur_batch  ) % 10 == 1:
+                    if (cur_batch  ) % 100== 1:
                         print('batch', cur_batch, ': time', time.time() - batch_time,'loss',batch_cost)
                         batch_time = time.time()
                     # train_err += the_err * FLAGS.batch_size
@@ -136,7 +137,7 @@ def train(train_dir=None, val_dir=None, mode='train'):
                         lr = 0
                         for j in range(num_batches_per_epoch_val):
                             batch_inputs, batch_labels = sess.run(test_data)
-                            new_batch_labels = utils.sparse_tuple_from_label(batch_labels)  # 对了
+                            new_batch_labels = utils.sparse_tuple_from_label(batch_labels.tolist())  # 对了
                             batch_seq_len = np.asarray([FLAGS.max_stepsize for _ in batch_inputs], dtype=np.int64)
                             val_feed = {model.inputs: batch_inputs,
                                         model.labels: new_batch_labels,

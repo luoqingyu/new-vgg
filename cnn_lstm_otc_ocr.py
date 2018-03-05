@@ -61,7 +61,7 @@ class LSTMOCR(object):
                 x = tf.contrib.layers.batch_norm(x, scale=True, decay=0.99, scope='bn_41')
                 #x = self._batch_norm('bn4_1', x)
                 x = self._leaky_relu(x, 0.01)
-                x = self._max_pool(x, [2,2], [2,2])
+                x = self._max_pool(x, [2,1], [2,1])
                 
                 x = self._conv2d(x, 'cnn-4_2', [2,2], filters[3], filters[3], [1,1])
                 x = tf.contrib.layers.batch_norm(x, scale=True, decay=0.99, scope='bn_42')
@@ -72,8 +72,8 @@ class LSTMOCR(object):
       
                 #x = tf.reshape(x, [FLAGS.batch_size,-1,512])
                 x = tf.transpose(x, [0, 2, 1,3])
-                x = tf.reshape(x, [FLAGS.batch_size,16,-1])
-                x.set_shape([FLAGS.batch_size,16, 1024])
+                x = tf.reshape(x, [FLAGS.batch_size,32,-1])
+                x.set_shape([FLAGS.batch_size,32, 1024])
                 print(x.shape)
             #x = tf.transpose(x, [0, 2, 1])  # batch_size * 64 * 48
             #shp = x.get_shape().as_list()

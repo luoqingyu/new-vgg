@@ -1,0 +1,55 @@
+nohup: ignoring input
+/home/work/anaconda3/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: compiletime version 3.5 of module 'tensorflow.python.framework.fast_tensor_util' does not match runtime version 3.6
+  return f(*args, **kwds)
+{'败': 1, '本': 2, '瘢': 3, '保': 4, '嗷': 5, '薄': 6, '编': 7, '1': 8, '0': 9, '3': 10, '2': 11, '5': 12, '4': 13, '7': 14, '6': 15, '9': 16, '8': 17, '白': 18, '拔': 19, '匕': 20}
+num_classes: 23
+plese enter model_name,gpu_idex,log_dir at lesast
+(?, 16, 128, 64)
+(?, 8, 64, 128)
+(?, 4, 32, 256)
+(?, 2, 16, 512)
+(32, 16, 1024)
+lstm_0:   (32, 16, 512)
+lstm_1:   (32, 16, 512)
+lstm_2:   (32, 16, 512)
+loading train data, please wait---------------------
+0
+Traceback (most recent call last):
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/framework/op_def_library.py", line 510, in _apply_op_helper
+    preferred_dtype=default_dtype)
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 926, in internal_convert_to_tensor
+    ret = conversion_func(value, dtype=dtype, name=name, as_ref=as_ref)
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/framework/ops.py", line 774, in _TensorTensorConversionFunction
+    (dtype.name, t.dtype.name, str(t)))
+ValueError: Tensor conversion requested dtype string for Tensor with dtype float32: 'Tensor("arg0:0", shape=(), dtype=float32)'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "main.py", line 314, in <module>
+    tf.app.run()
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/platform/app.py", line 48, in run
+    _sys.exit(main(_sys.argv[:1] + flags_passthrough))
+  File "main.py", line 305, in main
+    train(FLAGS.train_dir, FLAGS.val_dir, FLAGS.mode)
+  File "main.py", line 51, in train
+    dataset = dataset.map(_parse_function)
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/data/ops/dataset_ops.py", line 712, in map
+    return MapDataset(self, map_func)
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/data/ops/dataset_ops.py", line 1385, in __init__
+    self._map_func.add_to_graph(ops.get_default_graph())
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/framework/function.py", line 486, in add_to_graph
+    self._create_definition_if_needed()
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/framework/function.py", line 321, in _create_definition_if_needed
+    self._create_definition_if_needed_impl()
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/framework/function.py", line 338, in _create_definition_if_needed_impl
+    outputs = self._func(*inputs)
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/data/ops/dataset_ops.py", line 1358, in tf_map_func
+    ret = map_func(*nested_args)
+  File "main.py", line 41, in _parse_function
+    image_string = tf.read_file(filename)
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/ops/gen_io_ops.py", line 376, in read_file
+    "ReadFile", filename=filename, name=name)
+  File "/home/work/anaconda3/lib/python3.6/site-packages/tensorflow/python/framework/op_def_library.py", line 533, in _apply_op_helper
+    (prefix, dtypes.as_dtype(input_arg.type).name))
+TypeError: Input 'filename' of 'ReadFile' Op has type float32 that does not match expected type of string.
